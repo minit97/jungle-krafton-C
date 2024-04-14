@@ -101,7 +101,8 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 void frontBackSplitLinkedList(LinkedList *ll, LinkedList *resultFrontList, LinkedList *resultBackList)
-{
+{	
+	// 링크드 리스트 자르기 - frontList & backList 로 나누기
 	/* add your code here */
 }
 

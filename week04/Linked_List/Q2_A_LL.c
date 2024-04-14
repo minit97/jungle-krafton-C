@@ -102,8 +102,24 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
-{
+{	
+	// 첫번째 링크드 리스트에 사이 사이에 두번째 링크드 리스트 값 넣기
     /* add your code here */
+	if (ll1 == NULL || ll2 == NULL) return;
+
+	ListNode *firstCur = ll1->head;
+	ListNode *secondCur = ll2->head;
+	
+	int ins_idx = 1;
+	while (firstCur != NULL && secondCur != NULL) {
+		firstCur = firstCur->next;
+		insertNode(ll1, ins_idx, secondCur->item);
+		secondCur = secondCur->next;
+		removeNode(ll2, 0);
+
+		ins_idx += 2;
+	}
+ 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

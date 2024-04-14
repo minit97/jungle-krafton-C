@@ -71,7 +71,7 @@ int main()
 		case 3:
 			printf("The resulting sorted linked list is: ");
 			printList(&ll);
-			removeAllItems(&ll);
+			// removeAllItems(&ll);
 			break;
 		case 0:
 			removeAllItems(&ll);
@@ -89,8 +89,29 @@ int main()
 //////////////////////////////////////////////////////////////////////////////////
 
 int insertSortedLL(LinkedList *ll, int item)
-{
-	/* add your code here */
+{	
+	// 정수 값을 넣으면 오름차순 링크드 리스트로 들어간다.
+	// 이미 존재하는 값은 들어가지 않는다. : -1 반환
+	// 새로운 아이템이 들어가면 그 인덱스를 리턴한다.  
+	// 정렬된 링크드 리스트 아니면 빈 리스트다
+	/* add your code here */ 
+
+	ListNode *cur = ll->head;
+
+	int idx = 0;
+	while (cur != NULL) {
+		if(cur->item == item) {
+			idx = -1;
+			break;
+		} else if (cur->item < item) {
+			cur = cur->next;
+			idx++;
+		} else {
+			break;
+		}
+	};
+	insertNode(ll, idx, item);
+	return idx;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -100,14 +121,14 @@ void printList(LinkedList *ll){
 	ListNode *cur;
 	if (ll == NULL)
 		return;
-	cur = ll->head;
+	cur = ll->head;					// LinkedList 구조체의 head 값 = ListNode
 
 	if (cur == NULL)
 		printf("Empty");
 	while (cur != NULL)
 	{
-		printf("%d ", cur->item);
-		cur = cur->next;
+		printf("%d ", cur->item);	// ListNode 구조체의 item값
+		cur = cur->next;			// ListNode 구조체의 next 포인터 값
 	}
 	printf("\n");
 }
@@ -120,7 +141,7 @@ void removeAllItems(LinkedList *ll)
 
 	while (cur != NULL){
 		tmp = cur->next;
-		free(cur);
+		free(cur);					// 메모리 해제, 해제 후에는 해당 포인터 사용 X
 		cur = tmp;
 	}
 	ll->head = NULL;
@@ -141,7 +162,7 @@ ListNode *findNode(LinkedList *ll, int index){
 		return NULL;
 
 	while (index > 0){
-		temp = temp->next;
+		temp = temp->next;			// index만큼의 포인터를 움직여서 값을 찾는다.
 		if (temp == NULL)
 			return NULL;
 		index--;
@@ -160,7 +181,7 @@ int insertNode(LinkedList *ll, int index, int value){
 	// If empty list or inserting first node, need to update head pointer
 	if (ll->head == NULL || index == 0){
 		cur = ll->head;
-		ll->head = malloc(sizeof(ListNode));
+		ll->head = malloc(sizeof(ListNode));		// ListNode 구조체의 크기만큼 메모리를 할당
 		ll->head->item = value;
 		ll->head->next = cur;
 		ll->size++;
@@ -172,7 +193,7 @@ int insertNode(LinkedList *ll, int index, int value){
 	// Create a new node and reconnect the links
 	if ((pre = findNode(ll, index - 1)) != NULL){
 		cur = pre->next;
-		pre->next = malloc(sizeof(ListNode));
+		pre->next = malloc(sizeof(ListNode));		// 동적으로 메모리를 할당하여 'ListNode' 구조체에 대한 포인터 할당
 		pre->next->item = value;
 		pre->next->next = cur;
 		ll->size++;

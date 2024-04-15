@@ -1,5 +1,3 @@
-# jungle-krafton-C
-정글 크래프톤에서의 C관련 공부 및 프로젝트 모음입니다.
 =======
 The practicing sequence could be `Linked List` -> `Stack n Queue` -> `Binary Tree` -> `Binary Search Tree`.
 

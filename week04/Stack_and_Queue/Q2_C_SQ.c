@@ -110,15 +110,41 @@ int main()
 
 
 //////////////////////////////////////////////////////////////////////////////////
+// Stack 만들기!
 
-void createStackFromLinkedList(LinkedList *ll, Stack *s)
-{
+// 0을 기준으로 만들기 : 0번이 Stack의 최상위이다.
+void createStackFromLinkedList(LinkedList *ll, Stack *s) {
     /* add your code here */
+	int size = ll->size;
+    ListNode *LN;
+
+    //clear content
+    while(!isEmptyStack(s)) {
+        pop(s);
+	}
+
+    for(int i = 0; i < size; i++) {
+        LN = findNode(ll, i);
+        push(s, LN->item);
+    }
 }
 
-void removeEvenValues(Stack *s)
-{
+void removeEvenValues(Stack *s) {
 	/* add your code here */
+	int num;
+
+	if(isEmptyStack(s)) {
+        return;
+	}
+
+    //FILO
+	num = pop(s);
+
+	removeEvenValues(s);	//재귀
+
+	if(num % 2 != 0) {
+        push(s, num);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////

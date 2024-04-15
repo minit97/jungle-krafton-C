@@ -113,15 +113,37 @@ int main()
 
 
 //////////////////////////////////////////////////////////////////////////////////
+// Queue 만들기! 
 
-void createQueueFromLinkedList(LinkedList *ll, Queue *q)
-{
-	/* add your code here */
+void createQueueFromLinkedList(LinkedList *ll, Queue *q) {
+	/* add your code here */ 
+	ListNode *LN;
+									// queue 비우기!
+	while(!isEmptyQueue(q)) {		// queue가 비워져있지 않다면
+        dequeue(q);					// queue의 0번째 삭제
+	}
+
+	int size = ll->size;
+	for(int i = 0; i < size; i++) {
+        LN = findNode(ll, i);
+        enqueue(q, LN->item);		// queue에 item 넣기
+    }
+
 }
 
-void removeOddValues(Queue *q)
-{
+void removeOddValues(Queue *q) {
 	/* add your code here */
+	int size = q->ll.size;
+	int item;
+
+	for(int i = 0; i < size; i++) {
+        item = dequeue(q);
+
+        if(item % 2 == 0) {
+            enqueue(q, item);
+		}
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +180,7 @@ void removeAllItemsFromQueue(Queue *q)
 		dequeue(q);
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 
 void printList(LinkedList *ll){
 

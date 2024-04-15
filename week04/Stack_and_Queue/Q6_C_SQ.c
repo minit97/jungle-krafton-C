@@ -109,9 +109,19 @@ int main()
 
 ////////////////////////////////////////////////////////////
 
-void removeUntil(Stack *s, int value)
-{
-/* add your code here */
+void removeUntil(Stack *s, int value) {
+	/* add your code here */
+	if(isEmptyStack(s)) {
+		return;
+	}
+
+	while(1) {
+		if (pop(s) == value) {
+			break;
+		}
+	}
+
+	push(s, value);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

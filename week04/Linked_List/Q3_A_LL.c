@@ -89,6 +89,7 @@ void moveOddItemsToBack(LinkedList *ll){
 	
 	// 짝수 나오고 홀수 나오게
 	// 버블 정렬 사용
+	
 	ListNode *LN = ll->head;
 	ListNode *cur = NULL;
 

@@ -109,10 +109,22 @@ int main()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+// 스택을 이용한 큐를 반대로 뒤집기!
+void reverse(Queue *q) {
+	/* add your code here */
+	Stack s;
 
-void reverse(Queue *q)
-{
-/* add your code here */
+	s.ll.head = NULL;
+	s.ll.tail = NULL;
+	s.ll.size = 0;
+
+	while(!isEmptyQueue(q)) {
+		push(&s, dequeue(q));
+	}
+
+	while(!isEmptyStack(&s)) {
+		enqueue(q, pop(&s));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

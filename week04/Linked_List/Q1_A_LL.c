@@ -88,13 +88,13 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int insertSortedLL(LinkedList *ll, int item)
-{	
+int insertSortedLL(LinkedList *ll, int item) {
+	/* add your code here */ 
+	
 	// 정수 값을 넣으면 오름차순 링크드 리스트로 들어간다.
 	// 이미 존재하는 값은 들어가지 않는다. : -1 반환
 	// 새로운 아이템이 들어가면 그 인덱스를 리턴한다.  
 	// 정렬된 링크드 리스트 아니면 빈 리스트다
-	/* add your code here */ 
 
 	ListNode *cur = ll->head;
 

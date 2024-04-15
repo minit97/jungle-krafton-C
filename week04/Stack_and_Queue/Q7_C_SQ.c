@@ -102,10 +102,36 @@ int main()
 }
 
 ////////////////////////////////////////////////////////////
-int balanced(char *expression)
-{
-/* add your code here */
-}
+int balanced(char *expression) {
+	/* add your code here */
+
+	Stack s;
+
+	s.ll.head = NULL;
+	s.ll.size = 0;
+
+	char value;
+	// 포인터를 사용하여 문자열을 순회하며 각 문자 출력
+    while (*expression != '\0') {
+		value = *expression;
+		 
+		if (value == '(' || value == '[' || value == '{') {
+			push(&s, value);
+		} else {
+			char temp = pop(&s);
+			if((temp == '(' && value == ')') || (temp == '[' && value == ']') || (temp == '{' && value == '}')) {
+				expression++;
+				continue;	
+			}
+			return 1;
+		}
+        
+        expression++;  // 포인터를 다음 문자로 이동
+    }
+
+	return 0;
+} 
+
 
 ////////////////////////////////////////////////////////////
 
@@ -118,7 +144,6 @@ void removeAllItemsFromStack(Stack *s)
 		pop(s);
 	}
 }
-
 
 void removeAllItems(LinkedList *ll)
 {

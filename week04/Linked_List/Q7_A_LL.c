@@ -90,19 +90,18 @@ void RecursiveReverse(ListNode **ptrHead) {
 
 	// 반대로 만들기
 
-	ListNode* cur = *ptrHead;
-	ListNode* next = cur->next;
-	if (cur == NULL || cur->next == NULL) {
-		
+	ListNode* cur_node = *ptrHead;
+	ListNode* next_node = cur_node->next;
+	if (cur_node == NULL || cur_node->next == NULL) {
 		return;
 	}
 
 	// 최소단위로 나누기
-	RecursiveReverse(&next);
+	RecursiveReverse(&next_node);
 
-	cur -> next -> next = cur;
-	cur -> next = NULL;
-	*ptrHead = next;
+	cur_node -> next -> next = cur_node;
+	cur_node -> next = NULL;
+	*ptrHead = next_node;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

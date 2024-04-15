@@ -84,9 +84,35 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void moveEvenItemsToBack(LinkedList *ll)
-{
+void moveEvenItemsToBack(LinkedList *ll) {
 	/* add your code here */
+	
+	// 홀수 나오고 짝수 나오게
+	// 3번과 똑같이 버블 정렬 사용
+
+	ListNode *search_cur = ll->head;
+	ListNode *follow_cur = NULL;
+
+	while(search_cur != NULL && search_cur->next != NULL) {
+		if(search_cur->item % 2 == 0 && search_cur->next->item % 2 != 0) {
+			if(follow_cur != NULL) {
+				follow_cur->next = search_cur->next;
+				search_cur->next = search_cur->next->next;
+				follow_cur->next->next = search_cur;
+            } else {
+				ll->head = search_cur->next;
+				search_cur->next = search_cur->next->next;
+				ll->head->next = search_cur;
+            }
+			search_cur = ll->head;
+			follow_cur = NULL;
+		} else {
+			follow_cur = search_cur;
+			search_cur = search_cur->next;
+		}
+	}
+
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

@@ -84,9 +84,38 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void moveOddItemsToBack(LinkedList *ll)
-{
+void moveOddItemsToBack(LinkedList *ll){
 	/* add your code here */
+	
+	// 짝수 나오고 홀수 나오게
+	// 버블 정렬 사용
+	ListNode *LN = ll->head;
+	ListNode *cur = NULL;
+
+
+	while(LN != NULL && LN->next != NULL){
+        if(LN->item % 2 != 0 && LN->next->item % 2 == 0){
+            if(cur != NULL) {
+                //shift even number to the left
+                cur->next = LN->next;
+                LN->next = LN->next->next;          
+                cur->next->next = LN;
+            } else {
+                //execute if even at index 0, odd at index 1
+                ll->head = LN->next;
+                LN->next = LN->next->next;
+                ll->head->next = LN;
+            }
+
+            //cursor go back to the start
+            LN = ll->head;
+            cur = NULL;
+        } else {
+			cur = LN;
+        	LN = LN->next;
+		}
+    }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

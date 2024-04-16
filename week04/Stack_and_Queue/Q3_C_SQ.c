@@ -103,15 +103,12 @@ int main()
 
 int isStackPairwiseConsecutive(Stack *s) {
 	/* add your code here */
-
-	//check if empty or if odd no. of elements means not pairwise constructive
 	int size = s->ll.size;
     if(size == 0 || size % 2 != 0) {
         return 0;
 	}
 
     while(!isEmptyStack(s)) {
-        //check difference in the pairs
         if(abs(pop(s) - pop(s)) != 1) {
             return 0;
 		}

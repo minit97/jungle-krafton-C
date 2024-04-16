@@ -100,10 +100,18 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int sumOfOddNodes(BTNode *node)
-
-{
+int sumOfOddNodes(BTNode *node) {
     /* add your code here */
+    // 홀수의 노드들의 합
+    if(node == NULL) {
+        return;
+    }
+
+    if(node->item % 2 != 0) {
+        return sumOfOddNodes(node->left) + sumOfOddNodes(node->right) + node->item;
+    } else {
+        return sumOfOddNodes(node->left) + sumOfOddNodes(node->right);
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -92,8 +92,8 @@ int main()
                 break;
             }
         }
-        else
-        {printf("\n");
+        else {
+            printf("\n");
             scanf("%c",&e);
         }
 
@@ -103,9 +103,17 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void printSmallerValues(BTNode *node, int m)
-{
-	/* add your code here */
+void printSmallerValues(BTNode *node, int m) {
+    /* add your code here */
+    // 주어진 숫자 m 보다 작은 노드의 값들을 출력
+    if (node == NULL) {
+        return;
+    }
+    if(node->item < m) {
+        printf("%d ", node->item);
+    }
+    printSmallerValues(node->left, m);
+    printSmallerValues(node->right, m);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -175,7 +183,7 @@ BTNode *createTree()
     return root;
 }
 
-void push( Stack *stack, BTNode *node)
+void push(Stack *stack, BTNode *node)
 {
     StackNode *temp;
 

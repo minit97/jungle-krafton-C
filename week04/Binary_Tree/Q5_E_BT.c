@@ -103,9 +103,22 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void mirrorTree(BTNode *node)
-{
-	/* add your code here */
+void mirrorTree(BTNode *node) {
+    /* add your code here */
+    // 루트 기준으로 오른쪽 왼쪽 변경
+
+    if (node == NULL) {
+        return ;
+    }
+
+    BTNode *temp_left_node = node->left;
+    BTNode *temp_right_node = node->right;
+    node->left = temp_right_node;
+    node->right = temp_left_node;
+
+    mirrorTree(temp_left_node);
+    mirrorTree(temp_right_node);
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -94,10 +94,20 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int maxHeight(BTNode *node)
+int maxHeight(BTNode *node) {
+    /* add your code here */    
+    // 트리의 최대 깊이
+    int temp_left = 0;
+    int temp_right = 0;
 
-{
-    /* add your code here */
+    if(node == NULL) {
+        return -1;
+    }
+
+    temp_left = maxHeight(node->left) + 1;
+    temp_right = maxHeight(node->right) + 1;
+
+    return temp_left > temp_right ? temp_left : temp_right;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

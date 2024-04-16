@@ -113,10 +113,18 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int identical(BTNode *tree1, BTNode *tree2)
+int identical(BTNode *tree1, BTNode *tree2) {
+    /* add your code here */
+    // 두 트리가 구조적으로 동일하면 1 아니면 0
+    if (tree1 == NULL && tree2 == NULL) {
+        return 1;
+    }
+    
+    if((tree1->item != tree2->item) || (tree1 == NULL && tree2 != NULL) || (tree1 != NULL && tree2 == NULL)) {
+        return 0;
+    }
 
-{
-   /* add your code here */
+    return identical(tree1->left, tree2->left) && identical(tree1->right, tree2->right);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -132,8 +140,7 @@ BTNode *createBTNode(int item){
 //////////////////////////////////////////////////////////////////////////////////
 
 
-BTNode *createTree()
-{
+BTNode *createTree(){
     Stack stk;
     BTNode *root, *temp;
     char s;
@@ -142,39 +149,31 @@ BTNode *createTree()
     stk.top = NULL;
     root = NULL;
 
-    printf("Input an integer that you want to add to the binary tree. Any Alpha value will be treated as NULL.\n");
+    // 알파벳 입력 시 NULL 처리
+    printf("Input an integer that you want to add to the binary tree. Any Alpha value will be treated as NULL.\n"); 
     printf("Enter an integer value for the root: ");
-    if(scanf("%d",&item) > 0)
-    {
+    if(scanf("%d",&item) > 0) {
         root = createBTNode(item);
-        push(&stk,root);
-    }
-    else
-    {
+        push(&stk, root);
+    } else {
         scanf("%c",&s);
     }
 
-    while((temp =pop(&stk)) != NULL)
-    {
+    while((temp = pop(&stk)) != NULL) {
 
         printf("Enter an integer value for the Left child of %d: ", temp->item);
 
-        if(scanf("%d",&item)> 0)
-        {
+        if(scanf("%d",&item) > 0) {
             temp->left = createBTNode(item);
         }
-        else
-        {
+        else {
             scanf("%c",&s);
         }
 
         printf("Enter an integer value for the Right child of %d: ", temp->item);
-        if(scanf("%d",&item)>0)
-        {
+        if(scanf("%d",&item) > 0) {
             temp->right = createBTNode(item);
-        }
-        else
-        {
+        } else {
             scanf("%c",&s);
         }
 
@@ -186,18 +185,17 @@ BTNode *createTree()
     return root;
 }
 
-void push( Stack *stk, BTNode *node){
+void push(Stack *stk, BTNode *node){
     StackNode *temp;
 
     temp = malloc(sizeof(StackNode));
     if(temp == NULL)
         return;
     temp->btnode = node;
-    if(stk->top == NULL){
+    if(stk->top == NULL) {
         stk->top = temp;
         temp->next = NULL;
-    }
-    else{
+    } else {
         temp->next = stk->top;
         stk->top = temp;
     }
@@ -232,7 +230,7 @@ void removeAll(BTNode **node){
     if(*node != NULL){
         removeAll(&((*node)->left));
         removeAll(&((*node)->right));
-        free(*node);
-        *node = NULL;
+        free(*node);                    // 메모리 해제
+        *node = NULL;                   // 포인터를 사용하지 않는다는 명시적 표현 & 유효하지 않음 
     }
 }

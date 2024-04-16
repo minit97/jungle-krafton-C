@@ -8,6 +8,7 @@ Purpose: Implementing the required functions for Question 7 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -100,9 +101,19 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int smallestValue(BTNode *node)
-{
-	/* add your code here */
+int smallestValue(BTNode *node) {
+    /* add your code here */
+    // 가장 작은 값 뽑기
+	if(node == NULL) {
+        return INT_MAX;
+    }
+
+    int cur_node = node->item;
+    int left_node = smallestValue(node->left);
+    int right_node = smallestValue(node->right);
+
+    int first_compare = (left_node > right_node) ? right_node : left_node;
+    return (cur_node > first_compare) ? first_compare : cur_node;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

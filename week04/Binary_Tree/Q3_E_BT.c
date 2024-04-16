@@ -98,10 +98,20 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-int countOneChildNodes(BTNode *node)
-
-{
+int countOneChildNodes(BTNode *node) {
     /* add your code here */
+    // 자식이 하나인 노드 찾기
+    if(node == NULL) {
+        return 0;
+    }
+
+    if(node->left != NULL && node->right == NULL) {
+        return countOneChildNodes(node->left) + 1;
+    } else if(node->left == NULL && node->right != NULL) {
+        return countOneChildNodes(node->right) + 1;
+    }
+
+    return countOneChildNodes(node->left) + countOneChildNodes(node->right);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

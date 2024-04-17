@@ -88,9 +88,34 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void inOrderTraversal(BSTNode *root)
-{
-	 /* add your code here */
+void inOrderTraversal(BSTNode *root) {
+	/* add your code here */
+	// 왼쪽 - 루트 - 오른쪽 을 반복적으로 출력
+
+	Stack s;
+	s.top = NULL;
+
+	if(root == NULL) {
+		return;
+	}
+
+	BSTNode *temp = root;
+	while(1) {
+		if(temp != NULL) {
+			push(&s, temp);
+			temp = temp->left;
+		} else {
+			if (!isEmpty(&s)) {
+				temp = pop(&s);
+				printf("%d ", temp->item);
+				temp = temp->right;
+			} else {
+				break;
+			}
+		}
+	}
+	
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

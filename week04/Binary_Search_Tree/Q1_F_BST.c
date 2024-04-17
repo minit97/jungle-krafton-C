@@ -91,10 +91,30 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void levelOrderTraversal(BSTNode* root)
-{
-
+void levelOrderTraversal(BSTNode* root) {
     /* add your code here */
+	QueueNode *head=NULL; 
+	QueueNode *tail=NULL;
+    BSTNode *BST_temp;
+
+    if(root == NULL) {
+        return;
+	}
+
+    enqueue(&head, &tail, root);
+
+    // bfs 형식이네, 루트 넣고 루트 빼고 양 옆 넣고 루프 돌리기
+    while(!isEmpty(head)) {
+        BST_temp = dequeue(&head, &tail);
+        printf("%d ", BST_temp->item);
+
+        if(BST_temp->left != NULL) {
+            enqueue(&head, &tail, BST_temp->left);
+		}
+        if(BST_temp->right != NULL) {
+            enqueue(&head, &tail, BST_temp->right);
+		}
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,14 +161,12 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 		// if queue is empty, insert at head
 		if (isEmpty(*headPtr)) {
 			*headPtr = newPtr;
-		}
-		else { // insert at tail
+		} else { // insert at tail
 			(*tailPtr)->nextPtr = newPtr;
 		}
 
 		*tailPtr = newPtr;
-	}
-	else {
+	} else {
 		printf("Node not inserted");
 	}
 }
@@ -156,14 +174,14 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 BSTNode* dequeue(QueueNode **headPtr, QueueNode **tailPtr)
 {
 	BSTNode *node = (*headPtr)->data;
-	QueueNode *tempPtr = *headPtr;
-	*headPtr = (*headPtr)->nextPtr;
+	QueueNode *tempPtr = *headPtr;		// 헤드
+	*headPtr = (*headPtr)->nextPtr;		// 헤드값 변경 다음으로
 
 	if (*headPtr == NULL) {
 		*tailPtr = NULL;
 	}
 
-	free(tempPtr);
+	free(tempPtr);						// 헤드 삭제
 
 	return node;
 }

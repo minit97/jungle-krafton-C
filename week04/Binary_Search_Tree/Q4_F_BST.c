@@ -89,9 +89,36 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void postOrderIterativeS1(BSTNode *root)
-{
-	 /* add your code here */
+void postOrderIterativeS1(BSTNode *root) {
+	/* add your code here */
+	// 스택에 루트 넣고 오른쪽 자식 넣고 왼쪽 자식 넣고를 반복
+
+    if(root == NULL) {
+        return;
+	}
+
+	Stack s;
+    s.top = NULL;
+
+	BSTNode *temp = root;
+	BSTNode *lastVisited = NULL;
+
+	while(temp != NULL || !isEmpty(&s)) {
+		if(temp != NULL) {
+			push(&s, temp);
+			temp = temp->left;
+		} else {
+			BSTNode *peek_node = peek(&s);	// stack의 top 데이터 확인
+
+			if (peek_node->right != NULL && lastVisited != peek_node->right) {
+				temp = peek_node->right;
+			}else {
+				printf("%d ", peek_node->item);
+				lastVisited = pop(&s);
+			}
+		}
+	}
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////

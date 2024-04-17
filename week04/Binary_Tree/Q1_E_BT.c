@@ -195,7 +195,7 @@ void push(Stack *stk, BTNode *node){
     if(stk->top == NULL) {
         stk->top = temp;
         temp->next = NULL;
-    } else {
+    }else{
         temp->next = stk->top;
         stk->top = temp;
     }

@@ -346,7 +346,7 @@ int rbtree_erase(rbtree *t, node_t *p) {
     successor->left->parent = successor;
     successor->color = p->color;
   }
-  free(p);  
+  free(p);
 
   if(original_color == RBTREE_BLACK) {
     del_fixup(t, replace);

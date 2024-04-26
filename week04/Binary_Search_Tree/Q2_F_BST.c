@@ -90,7 +90,7 @@ int main()
 
 void inOrderTraversal(BSTNode *root) {
 	/* add your code here */
-	// 왼쪽 - 루트 - 오른쪽 을 반복적으로 출력
+	// 왼쪽 - 루트 - 오른쪽 을 반복적으로 출력	// 중위 순회
 
 	Stack s;
 	s.top = NULL;

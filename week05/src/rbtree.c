@@ -346,7 +346,7 @@ int rbtree_erase(rbtree *t, node_t *p) {
     successor->left->parent = successor;
     successor->color = p->color;
   }
-  free(p);
+  free(p);  
 
   if(original_color == RBTREE_BLACK) {
     del_fixup(t, replace);
@@ -361,7 +361,7 @@ int inorder_search(const rbtree * t, node_t *p, int idx, key_t *arr, int n) {   
   if(p == t->nil || idx >= n) {
     return idx;
   }
-  // printf("%d ",p->key);
+  printf("%d ",p->key);
   idx = inorder_search(t, p->left, idx, arr, n);
   arr[idx++] = p->key;
   idx = inorder_search(t, p->right, idx, arr, n);

@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-extern int mm_init (void);
-extern void *mm_malloc (size_t size);
-extern void mm_free (void *ptr);
-extern void *mm_realloc(void *ptr, size_t size);
+extern int mm_init (void);                          // 초기화
+extern void *mm_malloc (size_t size);               // 할당
+extern void mm_free (void *ptr);                    // 해제
+extern void *mm_realloc(void *ptr, size_t size);    // 재할당
 
 
 /* 

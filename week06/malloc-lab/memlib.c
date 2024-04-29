@@ -55,14 +55,13 @@ void mem_reset_brk()
  *    by incr bytes and returns the start address of the new area. In
  *    this model, the heap cannot be shrunk.
  */
-void *mem_sbrk(int incr) 
-{
+void *mem_sbrk(int incr)  {
     char *old_brk = mem_brk;
 
     if ( (incr < 0) || ((mem_brk + incr) > mem_max_addr)) {
-	errno = ENOMEM;
-	fprintf(stderr, "ERROR: mem_sbrk failed. Ran out of memory...\n");
-	return (void *)-1;
+        errno = ENOMEM;
+        fprintf(stderr, "ERROR: mem_sbrk failed. Ran out of memory...\n");
+        return (void *) - 1;
     }
     mem_brk += incr;
     return (void *)old_brk;
@@ -71,8 +70,7 @@ void *mem_sbrk(int incr)
 /*
  * mem_heap_lo - return address of the first heap byte
  */
-void *mem_heap_lo()
-{
+void *mem_heap_lo() {
     return (void *)mem_start_brk;
 }
 
@@ -87,15 +85,13 @@ void *mem_heap_hi()
 /*
  * mem_heapsize() - returns the heap size in bytes
  */
-size_t mem_heapsize() 
-{
+size_t mem_heapsize() {
     return (size_t)(mem_brk - mem_start_brk);
 }
 
 /*
  * mem_pagesize() - returns the page size of the system
  */
-size_t mem_pagesize()
-{
+size_t mem_pagesize() {
     return (size_t)getpagesize();
 }

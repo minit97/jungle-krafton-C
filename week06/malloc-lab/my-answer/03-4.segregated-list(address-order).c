@@ -1,4 +1,4 @@
-// Perf index = 46 (util) + 11 (thru) = 57/100
+// Perf index = 46 (util) + 9 (thru) = 55/100
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -247,7 +247,7 @@ static void splice_free_block(void *bp)
         GET_PRED(GET_SUCC(bp)) = GET_PRED(bp);
 }
 
-// 적합한 가용 리스트를 찾아서 사이즈 오름차순에 맞게 현재 블록을 추가하는 함수
+// 적합한 가용 리스트를 찾아서 주소 오름차순에 맞게 현재 블록을 추가하는 함수
 static void add_free_block(void *bp)
 {
     int class = get_class(GET_SIZE(HDRP(bp)));
@@ -259,9 +259,9 @@ static void add_free_block(void *bp)
         return;
     }
 
-    while (GET_SIZE(HDRP(currentp)) < GET_SIZE(HDRP(bp)))
+    while(currentp < bp)
     {
-        if (GET_SUCC(currentp) == NULL || GET_SIZE(HDRP(currentp)) > GET_SIZE(HDRP(bp)))
+        if(GET_SUCC(currentp) == NULL || GET_SUCC(currentp) > bp)
             break;
         currentp = GET_SUCC(currentp);
     }
@@ -270,7 +270,7 @@ static void add_free_block(void *bp)
     GET_SUCC(currentp) = bp;
     GET_PRED(bp) = currentp;
 
-    if (GET_SUCC(bp) != NULL)
+    if(GET_SUCC(bp) != NULL)
         GET_PRED(GET_SUCC(bp)) = bp;
 }
 

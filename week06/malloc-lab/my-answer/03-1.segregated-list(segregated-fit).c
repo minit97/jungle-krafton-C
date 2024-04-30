@@ -1,4 +1,4 @@
-// Perf index = 46 (util) + 11 (thru) = 57/100
+// Perf index = 46 (util) + 7 (thru) = 53/100
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,42 +16,43 @@ team_t team = {
     "",
     ""};
 
-/* single word (4) or double word (8) alignment */
-#define ALIGNMENT 8
 
-/* rounds up to the nearest multiple of ALIGNMENT */
+#define ALIGNMENT 8
 #define ALIGN(size) (((size) + (ALIGNMENT - 1)) & ~0x7)
 
-/* 기본 상수 & 매크로 */
-#define WSIZE 4              // word size
-#define DSIZE 8              // double word size
-#define CHUNKSIZE (1 << 12)  // 힙 확장을 위한 기본 크기 (= 초기 빈 블록의 크기)
-#define SEGREGATED_SIZE (12) // segregated list의 class 개수
+#define WSIZE 4              
+#define DSIZE 8              
+#define CHUNKSIZE (1 << 12)  
+
 #define MAX(x, y) (x > y ? x : y)
 
-/* 가용 리스트를 접근/순회하는 데 사용할 매크로 */
-#define PACK(size, alloc) (size | alloc)                              // size와 할당 비트를 결합, header와 footer에 저장할 값
-#define GET(p) (*(unsigned int *)(p))                                 // p가 참조하는 워드 반환 (포인터라서 직접 역참조 불가능 -> 타입 캐스팅)
-#define PUT(p, val) (*(unsigned int *)(p) = (unsigned int)(val))      // p에 val 저장
-#define GET_SIZE(p) (GET(p) & ~0x7)                                   // 사이즈 (~0x7: ...11111000, '&' 연산으로 뒤에 세자리 없어짐)
-#define GET_ALLOC(p) (GET(p) & 0x1)                                   // 할당 상태
-#define HDRP(bp) ((char *)(bp)-WSIZE)                                 // Header 포인터
-#define FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)          // Footer 포인터 (🚨Header의 정보를 참조해서 가져오기 때문에, Header의 정보를 변경했다면 변경된 위치의 Footer가 반환됨에 유의)
-#define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp)-WSIZE))) // 다음 블록의 포인터
-#define PREV_BLKP(bp) ((char *)(bp)-GET_SIZE(((char *)(bp)-DSIZE)))   // 이전 블록의 포인터
+#define PACK(size, alloc) (size | alloc)                              
+#define GET(p) (*(unsigned int *)(p))                                 
+#define PUT(p, val) (*(unsigned int *)(p) = (unsigned int)(val))      
+#define GET_SIZE(p) (GET(p) & ~0x7)                                   
+#define GET_ALLOC(p) (GET(p) & 0x1)                                   
+#define HDRP(bp) ((char *)(bp)-WSIZE)                                 
+#define FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)          
+#define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp)-WSIZE))) 
+#define PREV_BLKP(bp) ((char *)(bp)-GET_SIZE(((char *)(bp)-DSIZE)))   
 
-static char *heap_listp;                                // 클래스의 시작
-#define GET_SUCC(bp) (*(void **)((char *)(bp) + WSIZE)) // 다음 가용 블록의 주소
-#define GET_PRED(bp) (*(void **)(bp))                   // 이전 가용 블록의 주소
-#define GET_ROOT(class) (*(void **)((char *)(heap_listp) + (WSIZE * class)))
-
+static char *heap_listp;
 static void *extend_heap(size_t words);
 static void *coalesce(void *bp);
 static void *find_fit(size_t asize);
 static void place(void *bp, size_t asize);
-static void splice_free_block(void *bp); // 가용 리스트에서 제거
-static void add_free_block(void *bp);    // 가용 리스트에 추가
+
+#define GET_SUCC(bp) (*(void **)((char *)(bp) + WSIZE)) // 다음 가용 블록의 주소
+#define GET_PRED(bp) (*(void **)(bp))                   // 이전 가용 블록의 주소
+static void splice_free_block(void *bp);                // 가용 리스트에서 제거
+static void add_free_block(void *bp);                   // 가용 리스트에 추가
+
+#define SEGREGATED_SIZE (12)                            // segregated list의 class 개수
+#define GET_ROOT(class) (*(void **)((char *)(heap_listp) + (WSIZE * class)))
 static int get_class(size_t size);
+
+
+
 
 int mm_init(void)
 {
@@ -247,31 +248,14 @@ static void splice_free_block(void *bp)
         GET_PRED(GET_SUCC(bp)) = GET_PRED(bp);
 }
 
-// 적합한 가용 리스트를 찾아서 사이즈 오름차순에 맞게 현재 블록을 추가하는 함수
+// 적합한 가용 리스트를 찾아서 맨 앞에 현재 블록을 추가하는 함수
 static void add_free_block(void *bp)
 {
     int class = get_class(GET_SIZE(HDRP(bp)));
-    void *currentp = GET_ROOT(class);
-    if (currentp == NULL)
-    {
-        GET_ROOT(class) = bp;
-        GET_SUCC(bp) = NULL;
-        return;
-    }
-
-    while (GET_SIZE(HDRP(currentp)) < GET_SIZE(HDRP(bp)))
-    {
-        if (GET_SUCC(currentp) == NULL || GET_SIZE(HDRP(currentp)) > GET_SIZE(HDRP(bp)))
-            break;
-        currentp = GET_SUCC(currentp);
-    }
-
-    GET_SUCC(bp) = GET_SUCC(currentp);
-    GET_SUCC(currentp) = bp;
-    GET_PRED(bp) = currentp;
-
-    if (GET_SUCC(bp) != NULL)
-        GET_PRED(GET_SUCC(bp)) = bp;
+    GET_SUCC(bp) = GET_ROOT(class);     // bp의 해당 가용 리스트의 루트가 가리키던 블록
+    if (GET_ROOT(class) != NULL)        // list에 블록이 존재했을 경우만
+        GET_PRED(GET_ROOT(class)) = bp; // 루트였던 블록의 PRED를 추가된 블록으로 연결
+    GET_ROOT(class) = bp;
 }
 
 // 적합한 가용 리스트를 찾는 함수

@@ -87,6 +87,7 @@ static void *extend_heap(size_t words) {
     PUT(HDRP(bp), PACK(size, 0));           // free 블록의 header
     PUT(FTRP(bp), PACK(size, 0));           // free 블록의 footer
     PUT(HDRP(NEXT_BLKP(bp)), PACK(0, 1));   // new epilogue header
+    printf("header: %p %x, footer: %p %x\n", HDRP(bp), *HDRP(bp), FTRP(bp), *FTRP(bp));
 
     return coalesce(bp);
 }

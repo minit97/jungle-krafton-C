@@ -156,18 +156,18 @@ static void *find_fit(size_t asize){
     //     }
     // }
     void *bp = heap_listp;
-    while (bp != NULL) // 다음 가용 블럭이 있는 동안 반복
-    {
-        if ((asize <= GET_SIZE(HDRP(bp)))) // 적합한 사이즈의 블록을 찾으면 반환
+    while (bp != NULL) {                        // 다음 가용 블럭이 있는 동안 반복
+        if ((asize <= GET_SIZE(HDRP(bp)))) {    // 적합한 사이즈의 블록을 찾으면 반환
             return bp;
-        bp = GET_SUCC(bp); // 다음 가용 블록으로 이동
+        }
+        bp = GET_SUCC(bp);                      // 다음 가용 블록으로 이동
     }
     
     return NULL;
 }
 
 static void place(void *bp, size_t asize) {
-    splice_free_block(bp);                       // free_list에서 해당 블록 제거
+    splice_free_block(bp);                      // free_list에서 해당 블록 제거
     
     size_t csize = GET_SIZE(HDRP(bp));          // 현재 블록의 크기
 
@@ -227,13 +227,13 @@ static void splice_free_block(void *bp) {
 
     // 분리하려는 블록이 free_list 맨 앞에 있는 블록이면 (이전 블록이 없음)
     if (bp == heap_listp) {
-        heap_listp = GET_SUCC(heap_listp); // 다음 블록을 루트로 변경
+        heap_listp = GET_SUCC(heap_listp);      // 다음 블록을 루트로 변경
         return;
     }
     // 이전 블록의 SUCC을 다음 가용 블록으로 연결
     GET_SUCC(GET_PRED(bp)) = GET_SUCC(bp);
     // 다음 블록의 PRED를 이전 블록으로 변경
-    if (GET_SUCC(bp) != NULL) {  // 다음 가용 블록이 있을 경우만
+    if (GET_SUCC(bp) != NULL) {                 // 다음 가용 블록이 있을 경우만
         GET_PRED(GET_SUCC(bp)) = GET_PRED(bp);
     }
 }

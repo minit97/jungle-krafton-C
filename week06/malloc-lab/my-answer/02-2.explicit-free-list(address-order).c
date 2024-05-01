@@ -155,20 +155,21 @@ static void *find_fit(size_t asize){
     //     }
     // }
     void *bp = heap_listp;
-    while (bp != NULL) // 다음 가용 블럭이 있는 동안 반복
-    {
-        if ((asize <= GET_SIZE(HDRP(bp)))) // 적합한 사이즈의 블록을 찾으면 반환
+    while (bp != NULL) {                        // 다음 가용 블럭이 있는 동안 반복
+    
+        if ((asize <= GET_SIZE(HDRP(bp)))) {    // 적합한 사이즈의 블록을 찾으면 반환
             return bp;
-        bp = GET_SUCC(bp); // 다음 가용 블록으로 이동
+        }
+        bp = GET_SUCC(bp);                      // 다음 가용 블록으로 이동
     }
     
     return NULL;
 }
 
 static void place(void *bp, size_t asize) {
-    size_t csize = GET_SIZE(HDRP(bp));          // 현재 블록의 크기
+    size_t csize = GET_SIZE(HDRP(bp));              // 현재 블록의 크기
 
-    if((csize - asize) >= (2 * DSIZE)) {        // 차이가 최소 블록 크기 16보다 같거나 크면 분할
+    if((csize - asize) >= (2 * DSIZE)) {            // 차이가 최소 블록 크기 16보다 같거나 크면 분할
         PUT(HDRP(bp), PACK(asize, 1));
         PUT(FTRP(bp), PACK(asize, 1));
 
@@ -176,7 +177,7 @@ static void place(void *bp, size_t asize) {
         PUT(HDRP(bp), PACK(csize - asize, 0));
         PUT(FTRP(bp), PACK(csize - asize, 0));
 
-        GET_SUCC(bp) = GET_SUCC(PREV_BLKP(bp)); // 루트였던 블록의 PRED를 추가된 블록으로 연결
+        GET_SUCC(bp) = GET_SUCC(PREV_BLKP(bp));     // 루트였던 블록의 PRED를 추가된 블록으로 연결
         if (PREV_BLKP(bp) == heap_listp) {
             heap_listp = bp;
         } else {
@@ -184,7 +185,7 @@ static void place(void *bp, size_t asize) {
             GET_SUCC(GET_PRED(PREV_BLKP(bp))) = bp;
         }
 
-        if (GET_SUCC(bp) != NULL) {             // 다음 가용 블록이 있을 경우만
+        if (GET_SUCC(bp) != NULL) {                 // 다음 가용 블록이 있을 경우만
             GET_PRED(GET_SUCC(bp)) = bp;
         }
 

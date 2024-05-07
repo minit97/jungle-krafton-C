@@ -25,6 +25,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <sys/socket.h>
+
 #include <netdb.h>
 
 #include <netinet/in.h>
@@ -138,12 +139,12 @@ void *Calloc(size_t nmemb, size_t size);
 void Free(void *ptr);
 
 /* Sockets interface wrappers */
-int Socket(int domain, int type, int protocol);
+int Socket(int domain, int type, int protocol);                                     // Returns: nonnegative descriptor if OK, -1 on error
 void Setsockopt(int s, int level, int optname, const void *optval, int optlen);
-void Bind(int sockfd, struct sockaddr *my_addr, int addrlen);
-void Listen(int s, int backlog);
-int Accept(int s, struct sockaddr *addr, socklen_t *addrlen);
-void Connect(int sockfd, struct sockaddr *serv_addr, int addrlen);
+void Bind(int sockfd, struct sockaddr *my_addr, int addrlen);                       // Returns: 0 if OK, -1 on error
+void Listen(int s, int backlog);                                                    // Returns: 0 if OK, -1 on error
+int Accept(int s, struct sockaddr *addr, socklen_t *addrlen);                       // Returns: nonnegative descriptor if OK, -1 on error
+void Connect(int sockfd, struct sockaddr *serv_addr, int addrlen);                  // Returns: 0 if OK, -1 on error
 
 /* Protocol independent wrappers */
 void Getaddrinfo(const char *node, const char *service, 
@@ -192,8 +193,8 @@ int open_clientfd(char *hostname, char *port);
 int open_listenfd(char *port);
 
 /* Wrappers for reentrant protocol-independent client/server helpers */
-int Open_clientfd(char *hostname, char *port);
-int Open_listenfd(char *port);
+int Open_clientfd(char *hostname, char *port);                                  // Returns: descriptor if OK, -1 on error
+int Open_listenfd(char *port);                                                  // Returns: descriptor if OK, -1 on error
 
 
 #endif /* __CSAPP_H__ */

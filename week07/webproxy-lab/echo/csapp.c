@@ -604,7 +604,7 @@ void Getaddrinfo(const char *node, const char *service,
 {
     int rc;
 
-    if ((rc = getaddrinfo(node, service, hints, res)) != 0) 
+    if ((rc = getaddrinfo(node, service, hints, res)) != 0) // Returns: 0 if OK, nonzero error code on error
         gai_error(rc, "Getaddrinfo error");
 }
 /* $end getaddrinfo */
@@ -1016,8 +1016,8 @@ int open_listenfd(char *port)
             continue;  /* Socket failed, try the next */
 
         /* Eliminates "Address already in use" error from bind */
-        setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR,    //line:netp:csapp:setsockopt
-                   (const void *)&optval , sizeof(int));
+        setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR,      // line:netp:csapp:setsockopt
+                   (const void *)&optval , sizeof(int));    // 소켓의 동작을 제어하고 소켓의 속성을 변경하는 데 사용
 
         /* Bind the descriptor to the address */
         if (bind(listenfd, p->ai_addr, p->ai_addrlen) == 0)

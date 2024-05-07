@@ -13,42 +13,14 @@ int main(int argc, char **argv) {
     port = argv[2];
 
     clientfd = open_clientfd(host, port);
-    Rio_readinitb(&rio, clientfd);
+    Rio_readinitb(&rio, clientfd);                  // 버퍼 I/O 위한 초기화
 
-    while (Fgets(buf, MAXLINE, stdin) != NULL) {
-        Rio_writen(clientfd, buf, strlen(buf));
-        Rio_readlineb(&rio, buf, MAXLINE);
-        Fputs(buf, stdout);
+    while (Fgets(buf, MAXLINE, stdin) != NULL) {    // 표준 입력 스트림에서 문자열을 읽음
+        Rio_writen(clientfd, buf, strlen(buf));     // 버퍼 I/O 사용하여 데이터 쓰기 (버퍼에서 데이터를 읽어 파일에 쓰기 수행)
+
+        Rio_readlineb(&rio, buf, MAXLINE);          // 버퍼 I/O 사용하여 데이터 읽기
+        Fputs(buf, stdout);                         // 표준 출력 스트림에 문자열을 출력
     }
     Close(clientfd);
     exit(0);
 }
-
-// int open_clientfd(char *hostname, char *port) {
-//     int clientfd;
-//     struct addrinfo hints, *listp, *p;
-    
-//     memset(&hints, 0, sizeof(struct addrinfo));
-//     hints.ai_socktype = SOCK_STREAM;
-//     hints.ai_flags = AI_NUMERICSERV;
-//     hints.ai_flags |= AI_ADDRCONFIG;
-//     Getaddrinfo(hostname, port, &hints, &listp);
-
-//     for (p = listp; p; p = p->ai_next) {
-//         if((clientfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0) {
-//             continue;
-//         }
-
-//         if(connect(clientfd, p->ai_addr, p->ai_addrlen) != -1) {
-//             break;
-//         }
-//         Close(clientfd);
-//     }
-
-//     Freeaddrinfo(listp);
-//     if (!p) {
-//         return -1;
-//     } else {
-//         return clientfd;
-//     }
-// }
